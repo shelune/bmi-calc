@@ -22,6 +22,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var selectedHeight = 0
     var bmi = 0.0
     
+    var bmiCalc = BMICalculator()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -29,6 +32,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         bmiPicker.selectRow(0, inComponent: 1, animated: true)
         selectedWeight = minWeight
         selectedHeight = minHeight
+        bmiCalc = BMICalculator(weight: selectedWeight, height: selectedHeight)
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,14 +62,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 0 {
-            print("Weight component: \(row + minWeight) selected")
-            selectedWeight = row + minWeight
+            bmiCalc.setWeight(row + minWeight)
         } else {
-            print("Height component: \(row + minHeight) selected")
-            selectedHeight = row + minHeight
+            bmiCalc.setHeight(row + minHeight)
         }
-        bmi = Double(selectedWeight) / (Double(selectedHeight) * Double(selectedHeight) / 100.00) * 100
-        BMIValue.text = "BMI Value: \(NSString(format: "%.2f", bmi) as String)"
+        BMIValue.text = "\(bmiCalc.calculate())"
     }
     
 }
